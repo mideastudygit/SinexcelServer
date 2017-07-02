@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<project name="NetServer" default="release">
+
+	<path id="classPath">
+		<fileset dir="lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<taskdef name="replaceFile" classname="com.base.ant.ReplaceFileTask" classpathref="classPath" />
+	<typedef name="token" classname="com.base.ant.ReplaceFileTag" classpathref="classPath" />
+
+	<target name="init">
+		<mkdir dir="release" />
+		<delete>
+			<fileset dir="release">
+				<include name="*.*" />
+			</fileset>
+		</delete>
+		<mkdir dir="release/bin" />
+	</target>
+
+	<target name="compile" depends="init">
+		<echo message="开始编译..." />
+		<javac classpathref="classPath" destdir="release/bin" includeAntRuntime="no">
+			<src path="src" />
+		</javac>
+		<copy todir="release/bin">
+			<fileset dir="config">
+				<include name="*.*" />
+			</fileset>
+		</copy>
+		<replaceFile file="release/bin/appConfig.properties">
+			<token reg="port-tcp=[^\s]+" value="port-tcp=13333" />
+			<token reg="port-http=[^\s]+" value="port-http=15556" />
+			<token reg="sp-url=[^\s]+" value="sp-url=http://10.252.0.3:8050/system" />
+			<token reg="version=[^\s]+" value="version=release" />
+			<token reg="redisIP=[^\s]+" value="redisIP=127.0.0.1" />
+			<token reg="localCache=[^\s]+" value="localCache=true" />
+		</replaceFile>
+	</target>
+
+	<target name="release" depends="compile">
+		<echo message="开始打包..." />
+		<jar destfile="release/NetServer.jar">
+			<fileset dir="release/bin">
+				<include name="**/*.*" />
+			</fileset>
+
+		</jar>
+		<delete dir="release/bin" />
+	</target>
+
+</project>
