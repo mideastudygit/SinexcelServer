@@ -31,4 +31,8 @@ public class ByteUtils {
 	public static void send() {
 
 	}
+
+	public static void print() {
+
+	}
 }
