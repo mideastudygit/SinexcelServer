@@ -20,11 +20,15 @@ public class ByteUtils {
 		ByteBuf buf = Unpooled.copiedBuffer(buffers);
 		return buf.readBytes(buf.readableBytes()).array();
 	}
-	
+
 	public static byte[] toArray(ByteBuf buffers, int index) {
 		ByteBuf buf = Unpooled.copiedBuffer(buffers);
 		buf.readerIndex(index);
 		buf.discardReadBytes();
 		return buf.readBytes(buf.readableBytes()).array();
+	}
+
+	public static void send() {
+
 	}
 }
